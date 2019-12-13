@@ -1,34 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
-import CharacterCard from './CharacterCard'
+import React from 'react'
 
-const CharacterGrid = () => {
-  const [character, setCharacter] = useState([]);
+import * as StyledComps from './styled'
 
-  useEffect(() => {
-    axios
-      .get("https://swapi.co/api/people/")
-      .then(res => {
-        let people = res.data.results
-        setCharacter(people);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
-
+const CharacterGrid = (props) => {
   return (
-    <div>
-      {character.map((person, index) => {
-        return <CharacterCard 
-                  key={index} 
-                  name={person.name} 
-                  height={person.height} 
-                  birthYear={person.birth_year}
-                  hairColor={person.hair_color}
-                />
-      })}
-    </div>
+    <StyledComps.CardsContainer className="cards-container">
+    </StyledComps.CardsContainer>
   );
 };
 
