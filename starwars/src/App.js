@@ -1,17 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import CharacterCard from './components/CharacterCard'
+import PaginationNav from './components/Pagination'
+import * as StyledComps from './components/styled'
+
 import './App.css';
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
+  const [character, setCharacter] = useState([]);
+  const [page, setPage] = useState(getCharacterPage(1));
 
-  // Fetch characters from the star wars api in an effect hook. Remember, anytime you have a 
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
+  useEffect(() => {
+    axios
+      .get(`https://swapi.co/api/people/?page=${page}`)
+      .then(res => {
+        let people = res.data.results
+        setCharacter(people);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [page]);
+
+
+  function getCharacterPage(pageNumber){
+    return pageNumber;
+  };
+
+
+  
+
+
 
   return (
     <div className="App">
+
       <h1 className="Header">React Wars</h1>
+
+      <StyledComps.CardsContainer className="card-container">
+        {character.map((person, index) => {
+          return <CharacterCard 
+                    key={index} 
+                    name={person.name} 
+                    height={person.height} 
+                    birthYear={person.birth_year}
+                    hairColor={person.hair_color}
+                  />
+        })}
+      </StyledComps.CardsContainer>
+
+      <PaginationNav 
+        getCharacterPage={ getCharacterPage }
+        // previousPage={ previousPage }
+        // firstPage={ firstPage }
+        setPage={ setPage }
+      />
     </div>
   );
 }
